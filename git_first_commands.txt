@@ -1,0 +1,98 @@
+git config --global 	ohne Änderung: aktueller Stand
+user.email <änderung>	zeigt User mail
+init.defaultBranch main	determines name of master branch
+user.name <änderung>	zeigt User name
+core.editor <änderung>	zeigt std texteditor
+	
+git init 	opens repository
+git status	shows changed files
+git rm 	deletes a file
+git mv	moves a file 
+	
+git log	shows commit history
+git log -- <file>	log for just one file
+git log -p	detailed commit history
+git log --oneline	shows shortened commit history
+git log --oneline --branches	--branches: commits from all branches shown
+git log --oneline --branches --graph	--graph: visualizes branching
+	
+git add <file|| folder>	adds file to staging area
+git commit --ammend	change a commit (only local!!)
+git commit 	commit files from staging area to repository
+git commit -m "message" 	attaches message to commit
+git rm --cached <file>	remove file from staging area
+git revert <commit hash> 	launches a new commit that undoes the changes
+git restore <file> 	verwirft Änderungen an einer Datei im WD
+	
+git diff 	shows changes to staging area
+git diff --cached 	shows changes in staging area
+git diff <hash1> <hash2>	shows difference between two files
+git diff <hash1> <hash2> --<file>	"shows differnece between two files in relation 
+to one file (try file.*)"
+	
+git reset	removes changes from staging area
+git reset <file>	removes changes from one file (Staging Area)
+git reset <commit hash>	"deletes all changes after specific hash 
+(WD changes stay active)"
+git reset --hard <commit hash>	deletes changes after hash and clears WD
+git reset --hard	"deletes changes and overwrites data from
+last commit"
+	
+git checkout <branch>	jumps to a branch
+git checkout -b <branch>	create new branch and jump directly to it
+git checkout <tag>	checkout anhand tag ausführen
+git checkout <commit hash>	restores the state of a commit
+git checkout master	jumps back to master
+git checkout <branch>	jump to another branch
+	
+git stash 	saves current state of WD 
+git stash pop 	restores last state of WD
+git stash list 	shows all stashes
+git diff stash 	shows diff of the last stash
+	
+git blame <file> 	"shows linewise in which commit the line has 
+been changed"
+git blame --color-lines <file>	highlight same commits coloured
+	
+git branch 	shows all branches
+git branch <branch> 	opens a new branch
+git branch -d <branch> 	branch löschen
+	
+git bisect start	starts binary search of bad commits
+git bisect bad [commit-id]	judge a commit with bad
+git bisect good [commit-id]	judge a commit with good
+git bisect reset	stop the binary search
+	
+git merge <branch> 	merge "branch" with currently opened branch
+git merge --no-ff	"surpresses fastforward merge
+-> always creates a merge-commit"
+git merge --ff-only	forces a fast forward merge
+	
+fast forward merge :	
+git  checkout master 	merge <branch> to master
+git merge <branch>	
+	
+git rebase <branch>	builts commit history based on another branch
+git rebase -i <branch> 	<edit> commit 
+	<fixup> commit (edit messages)
+	<squash> commit (summarize commits)
+	usage
+	
+git tag -a v<x.y> 	creates a new tag for version x.y
+git tag 	shows all existing tags
+git branch -M <name>	aktuellen branch benennen
+	
+	
+git clone <url> 	copies a master-branche of a repository
+git remote -v (-vv)	"shows which remote repositories are 
+being tracked"
+	
+git fetch 	"loads commits and branches from a remote 
+repository"
+git log origin/<branch> 	
+git merge origin/<branch> 	
+	
+git pull	does a git fetch, then a git merge
+git remoote add origin <url>	"url in origin übergeben und als synonym
+ für url nehmen"
+git push -u origin <branch>	branch auf origin pushen
