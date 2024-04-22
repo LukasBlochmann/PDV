@@ -16,8 +16,15 @@ class Motor {
     // align the motor to the initial position
     void calibrate();
 
+    // user calibration for normal prosedure (deadman switch)
+    void user_interaction_deadman();
+
     // saves wether motor has been calibrated or not
     bool calibrated;
+
+    int deadman;
+    int up;
+    int down;
 
   private:
     // execute calibrated steps
@@ -50,6 +57,10 @@ class Motor {
     int pin_count;            
     int step_number;
     unsigned long last_step_time; 
+
+    // variables needed for normal prosedure (deadman switch)
+    bool deadman_on;
+    
 };
 
 #endif

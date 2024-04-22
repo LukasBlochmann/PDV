@@ -12,12 +12,12 @@
 const int RED = A0, GREEN = A1, YELLOW = A2, BLUE = A3;
 int steps_to_go = 50;
 
-
+// korrekt ist 200 statt x
 Motor motor = Motor(200, BLUE, YELLOW, GREEN, RED);
 
 void setup(){
   Serial.begin(9600);
-  motor.speed(10);
+  motor.speed(30);
 }
 
 void loop(){

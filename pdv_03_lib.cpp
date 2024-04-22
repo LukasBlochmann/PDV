@@ -25,6 +25,12 @@ Motor::Motor(int number_of_steps, int pin_1, int pin_2,
   this->any_button_pressed = false;
   for (int i = 10; i < 14; i++){pinMode(i, INPUT);}
 
+  // initialize variables for normal prosedure (deadman switch)
+  this->deadman_on = false;
+  this->up = 10;
+  this->down = 11;
+  this->deadman = 12;
+
   // setup pins for motor control
   pinMode(this->upin_1, OUTPUT);
   pinMode(this->upin_2, OUTPUT);
@@ -175,4 +181,9 @@ void Motor::execute_steps(int thisStep){
 
 // user interaction to steer the motor
 //  bug fixes
+
+void Motor::user_interaction_deadman(){
+  if(digitalRead(this->deadman) == HIGH){
+    this->deadman_on = true;
+}}
 
