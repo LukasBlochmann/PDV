@@ -1,6 +1,10 @@
 #include <Arduino.h>
 #include "pdv_03_lib.h"
 
+
+
+//!!! Datentypen anpassen!!
+
 Motor::Motor(int number_of_steps, int pin_1, int pin_2,
                                       int pin_3, int pin_4){
   // first initialize variables for motor communication
@@ -32,6 +36,8 @@ Motor::Motor(int number_of_steps, int pin_1, int pin_2,
   this->deadman_pin = 12;
   this->std_pos;
   this->exit_pos;
+  this->set_back = false;
+  this->not_calibrating = false;
 
   // setup pins for motor control
   pinMode(this->upin_1, OUTPUT);
@@ -58,7 +64,7 @@ int Motor::step(int steps_to_move){
 
   // decrement the remaining steps
   while (steps_left > 0){
-    if(digitalRead(this->deadman_pin) == 0){
+    if(digitalRead(this->deadman_pin) == 0 && this->not_calibrating == false){
       this->exit_pos = steps_left;
       return 1;
     }
@@ -93,6 +99,18 @@ int Motor::step(int steps_to_move){
   return 0;
 }
 
+bool Motor::prevent_bouncing(int button_last, int active_button){
+  while(1){
+    if((digitalRead(active_button) == HIGH) && button_last == 0){
+      return true;
+    }
+    // while(!(digitalRead(active_button) == HIGH) && button_last == 0))
+    // {continue;}
+          
+    button_last = (digitalRead(active_button) == LOW) ? 0 : button_last;
+  }     
+}
+
 // initial communication with user before motor is used for the first time
 void Motor::user_launch_communication(){
 
@@ -109,7 +127,7 @@ void Motor::user_launch_communication(){
 void Motor::calibrate(){
   // print user communication interface to console
   user_launch_communication();
-
+  this->not_calibrating = true;
   // calibration loop
   while(this->calibrated != true){
     if ((digitalRead(this->forward)) == HIGH){
@@ -133,17 +151,21 @@ void Motor::calibrate(){
           this->any_button_pressed = true;
           
         // check if confirm button is pressed, confirm calibration
-        }else if((digitalRead(this->confirm) == HIGH) && this->calibration_button_last == 0){
-          this->calibrated = true;
-          Serial.println("Motor is calibrated.");
-          this->std_pos = 0;
-          break;
+        }else{
+          this->calibrated = prevent_bouncing(this->calibration_button_last, this->confirm);
+          if(this->calibrated == true){
+            Serial.println("Motor is calibrated.");
+            this->std_pos = 0;
+            break;
+          }
         }
+
         // this line guarantees that the confirm button needs to be pressed a second time in order to confirm the calibration
-        this->calibration_button_last = (digitalRead(this->confirm) == LOW) ? 0 : this->calibration_button_last;
+        
       }
       // set bool to false to make loop available for next calibration
       this->any_button_pressed = false;
+      this->not_calibrating = false;
     }
   }
 
@@ -186,6 +208,7 @@ void Motor::print_user_interruption_deadman(){
   Serial.println("You stopped pressing the Deadman-Switch.\n");
   Serial.println("If you want to revert to the calibrated standard position, press Deadman-Switch(3) and the up(1) button.");
   Serial.println("If you want to continue the movement, press the deadman-Switch(3) and the down(2) button.\n");
+  this->set_back = false;
 }
 
 // user interaction to steer the motor
@@ -193,12 +216,17 @@ void Motor::print_user_interruption_deadman(){
 
 
 void Motor::execute_user_interruption_deadman(){
-  if(digitalRead(this->up_pin) == HIGH){
-      this->step(-(this->exit_pos));
-      this->exit_pos = 0;
-  }else if(digitalRead(this->down_pin) == HIGH){
-      this->step(50 - (this->exit_pos));
-      this->exit_pos = 0;
+  while(this->set_back == false){
+
+    if(digitalRead(this->up_pin) == HIGH){
+        this->step(-(this->exit_pos));
+        this->exit_pos = 0;
+        this->set_back = true;
+    }else if(digitalRead(this->down_pin) == HIGH){
+        this->step(50 - (this->exit_pos));
+        this->exit_pos = 0;
+        this->set_back = true;
+    }
   }
 
 }

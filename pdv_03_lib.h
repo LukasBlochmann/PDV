@@ -23,6 +23,8 @@ class Motor {
 
     void execute_user_interruption_deadman();
 
+    bool prevent_bouncing(int button_last, int active_last);
+
 
     // saves wether motor has been calibrated or not
     bool calibrated;
@@ -67,6 +69,8 @@ class Motor {
     int deadman_on;
     int std_pos;
     int exit_pos;
+    bool set_back;
+    bool not_calibrating;
     
 };
 
