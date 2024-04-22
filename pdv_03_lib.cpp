@@ -217,15 +217,18 @@ void Motor::print_user_interruption_deadman(){
 
 void Motor::execute_user_interruption_deadman(){
   while(this->set_back == false){
-
-    if(digitalRead(this->up_pin) == HIGH){
+    Serial.println(this->exit_pos);
+    Serial.println(-(this->exit_pos));
+    if(prevent_bouncing(1, this->up_pin) == true){
         this->step(-(this->exit_pos));
         this->exit_pos = 0;
         this->set_back = true;
-    }else if(digitalRead(this->down_pin) == HIGH){
+        this->std_pos = 0;
+    }else if(prevent_bouncing(1, this->down_pin) == true){
         this->step(50 - (this->exit_pos));
         this->exit_pos = 0;
         this->set_back = true;
+        this->std_pos = 50;
     }
   }
 
@@ -237,11 +240,16 @@ void Motor::user_interaction_deadman(){
     if(this->step(50) == 1){
       print_user_interruption_deadman();
       execute_user_interruption_deadman(); 
+    }else{
+      this->std_pos = 50;
     }
+    
   }else if(digitalRead(this->down_pin) == HIGH && this->std_pos == 50){
     if(this->step(-50) == 1){
       print_user_interruption_deadman();
       execute_user_interruption_deadman();
+    }else{
+      this->std_pos = 0;
     }
   }
 }
