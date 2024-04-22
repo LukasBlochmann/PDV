@@ -19,6 +19,8 @@ Motor::Motor(int number_of_steps, int pin_1, int pin_2,
   this->upin_3 = pin_3;
   this->upin_4 = pin_4;
 
+  this->in_interrupt = false;
+
 
   // initialize buttons for user com. and calibration
   this->forward = 10;
@@ -37,7 +39,7 @@ Motor::Motor(int number_of_steps, int pin_1, int pin_2,
   this->std_pos;
   this->exit_pos;
   this->set_back = false;
-  this->not_calibrating = false;
+  this->calibrating = false;
 
   // setup pins for motor control
   pinMode(this->upin_1, OUTPUT);
@@ -61,11 +63,12 @@ int Motor::step(int steps_to_move){
   if (steps_to_move > 0) { this->direction = 1; }
   if (steps_to_move < 0) { this->direction = 0; }
 
-
   // decrement the remaining steps
   while (steps_left > 0){
-    if(digitalRead(this->deadman_pin) == 0 && this->not_calibrating == false){
+    if((digitalRead(this->deadman_pin) == LOW) && this->calibrating == false){
       this->exit_pos = steps_left;
+      this->step_number = 0;
+      this->number_of_steps = 50;
       return 1;
     }
 
@@ -101,13 +104,19 @@ int Motor::step(int steps_to_move){
 
 bool Motor::prevent_bouncing(int button_last, int active_button){
   while(1){
-    if((digitalRead(active_button) == HIGH) && button_last == 0){
-      return true;
+    unsigned long now = micros();
+    if(now - this->last_step_time >= 200){
+      this->last_step_time = now;
+      if((digitalRead(active_button) == HIGH) && button_last == 0){
+        return true;
+      }
     }
     // while(!(digitalRead(active_button) == HIGH) && button_last == 0))
     // {continue;}
           
     button_last = (digitalRead(active_button) == LOW) ? 0 : button_last;
+
+
   }     
 }
 
@@ -127,7 +136,7 @@ void Motor::user_launch_communication(){
 void Motor::calibrate(){
   // print user communication interface to console
   user_launch_communication();
-  this->not_calibrating = true;
+  this->calibrating = true;
   // calibration loop
   while(this->calibrated != true){
     if ((digitalRead(this->forward)) == HIGH){
@@ -156,6 +165,7 @@ void Motor::calibrate(){
           if(this->calibrated == true){
             Serial.println("Motor is calibrated.");
             this->std_pos = 0;
+            this->calibrating = false;
             break;
           }
         }
@@ -165,7 +175,6 @@ void Motor::calibrate(){
       }
       // set bool to false to make loop available for next calibration
       this->any_button_pressed = false;
-      this->not_calibrating = false;
     }
   }
 
@@ -208,7 +217,6 @@ void Motor::print_user_interruption_deadman(){
   Serial.println("You stopped pressing the Deadman-Switch.\n");
   Serial.println("If you want to revert to the calibrated standard position, press Deadman-Switch(3) and the up(1) button.");
   Serial.println("If you want to continue the movement, press the deadman-Switch(3) and the down(2) button.\n");
-  this->set_back = false;
 }
 
 // user interaction to steer the motor
@@ -216,40 +224,46 @@ void Motor::print_user_interruption_deadman(){
 
 
 void Motor::execute_user_interruption_deadman(){
-  while(this->set_back == false){
-    Serial.println(this->exit_pos);
-    Serial.println(-(this->exit_pos));
-    if(prevent_bouncing(1, this->up_pin) == true){
-        this->step(-(this->exit_pos));
-        this->exit_pos = 0;
-        this->set_back = true;
-        this->std_pos = 0;
-    }else if(prevent_bouncing(1, this->down_pin) == true){
-        this->step(50 - (this->exit_pos));
-        this->exit_pos = 0;
-        this->set_back = true;
-        this->std_pos = 50;
+  while(1){
+    this->in_interrupt = true;
+    if(prevent_bouncing(1, this->up_pin) == true && digitalRead(this->deadman_pin) == HIGH){
+      if(this->step(-(this->exit_pos)) == 1){continue;}
+      this->exit_pos = 0;
+      this->std_pos = 0;
+      this->in_interrupt = false;
+      break;
+
+    }else if(prevent_bouncing(1, this->down_pin) == true  && digitalRead(this->deadman_pin) == HIGH){
+      if(this->step((50 - this->exit_pos)) == 1){continue;}
+      this->exit_pos = 0;
+      this->std_pos = 50;
+      this->in_interrupt = false;
+      break;
     }
   }
-
 }
 
 
+
+
 void Motor::user_interaction_deadman(){
-  if(digitalRead(this->up_pin) == HIGH && this->std_pos == 0){
-    if(this->step(50) == 1){
-      print_user_interruption_deadman();
-      execute_user_interruption_deadman(); 
-    }else{
-      this->std_pos = 50;
-    }
-    
-  }else if(digitalRead(this->down_pin) == HIGH && this->std_pos == 50){
-    if(this->step(-50) == 1){
-      print_user_interruption_deadman();
-      execute_user_interruption_deadman();
-    }else{
-      this->std_pos = 0;
+  if(digitalRead(this->deadman_pin) == HIGH){
+
+    if(digitalRead(this->up_pin) == HIGH && this->std_pos == 0){
+      if(this->step(50) == 1){
+        print_user_interruption_deadman();
+        execute_user_interruption_deadman(); 
+      }else{
+        this->std_pos = 50;
+      }
+      
+    }else if(digitalRead(this->down_pin) == HIGH && this->std_pos == 50){
+      if(this->step(-50) == 1){
+        print_user_interruption_deadman();
+        execute_user_interruption_deadman();
+      }else{
+        this->std_pos = 0;
+      }
     }
   }
 }

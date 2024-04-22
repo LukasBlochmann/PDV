@@ -70,8 +70,8 @@ class Motor {
     int std_pos;
     int exit_pos;
     bool set_back;
-    bool not_calibrating;
-    
+    bool calibrating;
+    bool in_interrupt;
 };
 
 #endif

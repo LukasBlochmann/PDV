@@ -29,5 +29,4 @@ void loop(){
   }
 
   motor.user_interaction_deadman();
-  delay(1000);
 }
