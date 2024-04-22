@@ -11,7 +11,7 @@ class Motor {
     void speed(long user_speed);
 
     // calculate delay and number of steps
-    void step(int number_of_steps);
+    int step(int number_of_steps);
 
     // align the motor to the initial position
     void calibrate();
@@ -19,12 +19,17 @@ class Motor {
     // user calibration for normal prosedure (deadman switch)
     void user_interaction_deadman();
 
+    void print_user_interruption_deadman();	
+
+    void execute_user_interruption_deadman();
+
+
     // saves wether motor has been calibrated or not
     bool calibrated;
 
-    int deadman;
-    int up;
-    int down;
+    int deadman_pin;
+    int up_pin;
+    int down_pin;
 
   private:
     // execute calibrated steps
@@ -59,7 +64,9 @@ class Motor {
     unsigned long last_step_time; 
 
     // variables needed for normal prosedure (deadman switch)
-    bool deadman_on;
+    int deadman_on;
+    int std_pos;
+    int exit_pos;
     
 };
 

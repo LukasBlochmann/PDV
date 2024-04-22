@@ -28,7 +28,6 @@ void loop(){
     motor.calibrate();
   }
 
-
-  motor.step(50);
+  motor.user_interaction_deadman();
   delay(1000);
 }

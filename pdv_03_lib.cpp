@@ -26,10 +26,12 @@ Motor::Motor(int number_of_steps, int pin_1, int pin_2,
   for (int i = 10; i < 14; i++){pinMode(i, INPUT);}
 
   // initialize variables for normal prosedure (deadman switch)
-  this->deadman_on = false;
-  this->up = 10;
-  this->down = 11;
-  this->deadman = 12;
+  this->deadman_on;
+  this->up_pin = 10;
+  this->down_pin = 11;
+  this->deadman_pin = 12;
+  this->std_pos;
+  this->exit_pos;
 
   // setup pins for motor control
   pinMode(this->upin_1, OUTPUT);
@@ -45,7 +47,7 @@ void Motor::speed(long whatSpeed){
 }
 
 // step handling
-void Motor::step(int steps_to_move){
+int Motor::step(int steps_to_move){
   // steps to go until the motor stops
   int steps_left = abs(steps_to_move);  
 
@@ -55,12 +57,15 @@ void Motor::step(int steps_to_move){
 
 
   // decrement the remaining steps
-  while (steps_left > 0)
-  {
+  while (steps_left > 0){
+    if(digitalRead(this->deadman_pin) == 0){
+      this->exit_pos = steps_left;
+      return 1;
+    }
+
     unsigned long now = micros();
     // only move if interval has passed
-    if (now - this->last_step_time >= this->step_delay)
-    {
+    if (now - this->last_step_time >= this->step_delay){
       // timestamp for next calc.
       this->last_step_time = now;
       
@@ -85,22 +90,19 @@ void Motor::step(int steps_to_move){
       execute_steps(this->step_number % 4);
     }
   }
+  return 0;
 }
 
 // initial communication with user before motor is used for the first time
 void Motor::user_launch_communication(){
 
   Serial.println();
-  Serial.println("You have to calibrate the motor before using it!");
-  Serial.println();
-  Serial.println("The motor is correctly calibrated, when the cabinet is positioned horizontally.");
-  Serial.println();
+  Serial.println("You have to calibrate the motor before using it!\n");
+  Serial.println("The motor is correctly calibrated, when the cabinet is positioned horizontally.\n");
   Serial.println("Please press Button: ");
   Serial.println("  - 10, to move it forwards;");
   Serial.println("  - 11, to move it backwards;");
-  Serial.println("  - 12, to confirm the calibration.");
-  Serial.println();
-
+  Serial.println("  - 12, to confirm the calibration.\n");
 }
 
 // calibrating the motor, user and motor interaction
@@ -134,6 +136,7 @@ void Motor::calibrate(){
         }else if((digitalRead(this->confirm) == HIGH) && this->calibration_button_last == 0){
           this->calibrated = true;
           Serial.println("Motor is calibrated.");
+          this->std_pos = 0;
           break;
         }
         // this line guarantees that the confirm button needs to be pressed a second time in order to confirm the calibration
@@ -179,11 +182,38 @@ void Motor::execute_steps(int thisStep){
 }
 
 
+void Motor::print_user_interruption_deadman(){
+  Serial.println("You stopped pressing the Deadman-Switch.\n");
+  Serial.println("If you want to revert to the calibrated standard position, press Deadman-Switch(3) and the up(1) button.");
+  Serial.println("If you want to continue the movement, press the deadman-Switch(3) and the down(2) button.\n");
+}
+
 // user interaction to steer the motor
 //  bug fixes
 
-void Motor::user_interaction_deadman(){
-  if(digitalRead(this->deadman) == HIGH){
-    this->deadman_on = true;
-}}
 
+void Motor::execute_user_interruption_deadman(){
+  if(digitalRead(this->up_pin) == HIGH){
+      this->step(-(this->exit_pos));
+      this->exit_pos = 0;
+  }else if(digitalRead(this->down_pin) == HIGH){
+      this->step(50 - (this->exit_pos));
+      this->exit_pos = 0;
+  }
+
+}
+
+
+void Motor::user_interaction_deadman(){
+  if(digitalRead(this->up_pin) == HIGH && this->std_pos == 0){
+    if(this->step(50) == 1){
+      print_user_interruption_deadman();
+      execute_user_interruption_deadman(); 
+    }
+  }else if(digitalRead(this->down_pin) == HIGH && this->std_pos == 50){
+    if(this->step(-50) == 1){
+      print_user_interruption_deadman();
+      execute_user_interruption_deadman();
+    }
+  }
+}
