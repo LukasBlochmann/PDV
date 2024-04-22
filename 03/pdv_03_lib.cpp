@@ -1,82 +1,77 @@
 #include <Arduino.h>
 #include "pdv_03_lib.h"
 
-
-
 //!!! Datentypen anpassen!!
 
-Motor::Motor(int number_of_steps, int pin_1, int pin_2,
-                                      int pin_3, int pin_4){
-  // first initialize variables for motor communication
+Motor::Motor(int number_of_steps, int pin_1, int pin_2, int pin_3, int pin_4){
+  // Initialize variables for internal motor control
   this->step_number = 0;    
   this->direction = 0;      
   this->last_step_time = 0; 
   this->number_of_steps = number_of_steps; 
+  this->calibrated = false; //If the motor is currently calibrated
+  this->calibration_button_last = 1; 
+  this->is_any_button_pressed = false;
+  this->standard_position; //Position the motor is in after a successful movement
+  this->exit_pos; //Absolute value of the remaining steps
+  this->calibrating = false;
 
-  // Pins on Arduino (setted by user) which control the motor
+  // Pins that are connected to the motor
   this->upin_1 = pin_1;
   this->upin_2 = pin_2;
   this->upin_3 = pin_3;
   this->upin_4 = pin_4;
 
-
-  // initialize buttons for user com. and calibration
-  this->forward = 10;
-  this->backwards = 11;
-  this->confirm = 12;
-  this->calibrated = false;
-  this->calibration_button_last = 1;
-  this->any_button_pressed = false;
-  for (int i = 10; i < 14; i++){pinMode(i, INPUT);}
-
-  // initialize variables for normal prosedure (deadman switch)
-  this->deadman_on;
+  // initialize buttons for user communication and calibration
   this->up_pin = 10;
   this->down_pin = 11;
-  this->deadman_pin = 12;
-  this->std_pos; //Position the motor is in after a succesfull movement
-  this->exit_pos; //Absolute value of the remaining steps
-  this->set_back = false;
-  this->calibrating = false;
+  this->confirmation_pin = 12;
+  this->deadman_pin = 13;
+  
+  // Configure the user communication pins as inputs
+  for (int i = 10; i <= 13; i++){pinMode(i, INPUT);}
 
-  // setup pins for motor control
+  // Configure the motor pins as outputs
   pinMode(this->upin_1, OUTPUT);
   pinMode(this->upin_2, OUTPUT);
   pinMode(this->upin_3, OUTPUT);
   pinMode(this->upin_4, OUTPUT);
-
-  this->pin_count = 4;
 }
 
+// Set the speed in revs per minute
 void Motor::speed(long whatSpeed){
   this->step_delay = 60L * 1000L * 1000L / this->number_of_steps / whatSpeed; //! ?????????????????????????????????????????????
 }
 
-// step handling
+// Perform a given number of steps
 int Motor::step(int steps_to_move){
-  // steps to go until the motor stops
+  //steps_to_move: Number of steps to move, positive for up and negative for down
+
   int steps_left = abs(steps_to_move);  
 
-  // DIR = 1 -> forward, DIR = 0 -> backwards
+  // determine direction based on whether steps_to_move is + or -:
   if (steps_to_move > 0) { this->direction = 1; }
-  if (steps_to_move < 0) { this->direction = 0; }
+  else if (steps_to_move < 0) { this->direction = 0; }
 
   // decrement the remaining steps
   while (steps_left > 0){
+    // In case the motor is not being calibrated, releasing the deadman switch has to stop all actions
     if((digitalRead(this->deadman_pin) == LOW) && this->calibrating == false){
+      // Save the remaining steps and exit with an error message
       this->exit_pos = steps_left;
       this->step_number = 0;
       this->number_of_steps = 50;
+      // Return an error
       return 1;
     }
 
-    unsigned long now = micros();
     // only move if interval has passed
+    unsigned long now = micros();
     if (now - this->last_step_time >= this->step_delay){
-      // timestamp for next calc.
+      // timestamp for next iteration
       this->last_step_time = now;
       
-      // remaining step handling (stops when given step number reached)
+      // increment or decrement step_number based on direction
       if (this->direction == 1)
       {
         this->step_number++;
@@ -93,94 +88,17 @@ int Motor::step(int steps_to_move){
       }
       // c.f. l. 53
       steps_left--;
-      // modulo 4 to choose the current phase
+      // modulo 4 to choose the current phase, which also determines the direction
       execute_steps(this->step_number % 4);
     }
   }
+  // If all steps were performed, return 0
   return 0;
 }
 
-bool Motor::prevent_bouncing(int button_last, int active_button){
-  while(1){
-    unsigned long now = micros();
-    if(now - this->last_step_time >= 200){
-      this->last_step_time = now;
-      if((digitalRead(active_button) == HIGH) && button_last == 0){
-        return true;
-      }
-    }
-    // while(!(digitalRead(active_button) == HIGH) && button_last == 0))
-    // {continue;}
-          
-    button_last = (digitalRead(active_button) == LOW) ? 0 : button_last;
-
-
-  }     
-}
-
-// initial communication with user before motor is used for the first time
-void Motor::user_launch_communication(){
-
-  Serial.println();
-  Serial.println("You have to calibrate the motor before using it!\n");
-  Serial.println("The motor is correctly calibrated, when the cabinet is positioned horizontally.\n");
-  Serial.println("Please press Button: ");
-  Serial.println("  - 10, to move it forwards;");
-  Serial.println("  - 11, to move it backwards;");
-  Serial.println("  - 12, to confirm the calibration.\n");
-}
-
-// calibrating the motor, user and motor interaction
-void Motor::calibrate(){
-  // print user communication interface to console
-  user_launch_communication();
-  this->calibrating = true;
-  // calibration loop
-  while(this->calibrated != true){
-    if ((digitalRead(this->forward)) == HIGH){
-      this->step(1);
-    }else if ((digitalRead(this->backwards)) == HIGH){
-      this->step(-1);
-    }else if (digitalRead((this->confirm)) == HIGH){
-      // prevent bouncing, only one confirmation per press
-      Serial.println("Sure, the motor is calibrated?");
-      Serial.println("Please press confirmation Button again to confirm.");
-      Serial.println("Press any other button to continue calibration.");
-      Serial.println();
-      this->calibration_button_last = 1;
-
-      
-      while(this->any_button_pressed == false){
-        // check if any button is pressed, cancel calibration
-        if((digitalRead(this->forward)) == HIGH || digitalRead((this->backwards)) == HIGH || digitalRead(13) == HIGH){
-          Serial.println("Confirmation has been canceled. Proceeding calibration.");
-          Serial.println();
-          this->any_button_pressed = true;
-          
-        // check if confirm button is pressed, confirm calibration
-        }else{
-          this->calibrated = prevent_bouncing(this->calibration_button_last, this->confirm);
-          if(this->calibrated == true){
-            Serial.println("Motor is calibrated.");
-            this->std_pos = 0;
-            this->calibrating = false;
-            break;
-          }
-        }
-
-        // this line guarantees that the confirm button needs to be pressed a second time in order to confirm the calibration
-        
-      }
-      // set bool to false to make loop available for next calibration
-      this->any_button_pressed = false;
-    }
-  }
-
-}
-
-// communication with motor, actual step executor
+// Physical communication with the motor
 void Motor::execute_steps(int thisStep){
-  // depending in which phase we are currently the function passes the sequence
+  // depending in which phase we are currently in, the function passes the sequence
   switch (thisStep){
     case 0:  // 1010
       digitalWrite(upin_1, HIGH);
@@ -210,44 +128,113 @@ void Motor::execute_steps(int thisStep){
   }
 }
 
+bool Motor::prevent_bouncing(int target_button, int last_state){
+  while(1){
+    unsigned long now = micros();
+    if(now - this->last_step_time >= 200){
+      this->last_step_time = now;
+      if((digitalRead(target_button) == HIGH) && last_state == 0){
+        return true;
+      }
+    }   
+    last_state = (digitalRead(target_button) == LOW) ? 0 : last_state;
+  }     
+}
 
+// Initial communication with user before motor is used for the first time
+void Motor::print_initial_help(){
+  Serial.println("\nYou have to calibrate the motor before using it!\n");
+  Serial.println("The motor is correctly calibrated, when the cabinet is positioned horizontally, to the left of the motor, when looking at it from the cabinet side.\n");
+  Serial.println("Please press the Buttons accordingly (left to right): ");
+  Serial.println("  - 1: Rotate clockwise");
+  Serial.println("  - 2: Rotate counterclockwise");
+  Serial.println("  - 3: Confirm calibration");
+  Serial.println("  - 4: Deadman-Switch\n\n");
+}
+
+// Calibrate the motor
+void Motor::calibrate(){
+  print_initial_help();
+  //Indicate the motor is being calibrated
+  this->calibrating = true;
+  // calibration loop
+  while(this->calibrated != true){
+    // Check which button is pressed, handle accordingly
+    if ((digitalRead(this->up_pin)) == HIGH){
+      this->step(1);
+    }else if ((digitalRead(this->down_pin)) == HIGH){
+      this->step(-1);
+    }else if (digitalRead((this->confirmation_pin)) == HIGH){
+      Serial.println("Please check again if the motor is calibrated correctly and confirm again.");
+      Serial.println("Press any other button to continue the calibration.\n");
+
+      //Prevent bouncing by checking if the button was released before being pressed again
+      this->calibration_button_last = 1;
+      
+      while(this->is_any_button_pressed == false){
+        // check if any other button is pressed, cancel calibration
+        if((digitalRead(this->up_pin)) == HIGH || digitalRead((this->down_pin)) == HIGH || digitalRead(13) == HIGH){
+          Serial.println("Confirmation has been canceled. Proceeding calibration.\n");
+          this->is_any_button_pressed = true;
+        }
+        // check if confirm button is pressed, confirm calibration
+        else{
+          this->calibrated = prevent_bouncing(this->confirmation_pin, this->calibration_button_last);
+          if(this->calibrated == true){
+            Serial.println("----------------------\nCalibration successful!\n----------------------\n\n");
+            //The calibrated position is defined as 0
+            this->standard_position = 0;
+            this->calibrating = false;
+            break;
+          }
+        }
+      }
+      this->is_any_button_pressed = false;
+    }
+  }
+}
+
+// Print user information in case the deadman switch was activated
 void Motor::print_user_interruption_deadman(){
   Serial.println("You stopped pressing the Deadman-Switch.\n");
   Serial.println("Press the Deadman-Switch again to return to the calibrated position");
 }
 
-// user interaction to steer the motor
-//  bug fixes
-void Motor::execute_user_interruption_deadman(int direction){
-  // direction: The direction the user intended (1 = up, -1 = down)
+// Waits in cas teh deadman switch was released while an action was performed
+void Motor::execute_user_interruption_deadman(){
   while(digitalRead(this->deadman_pin) == LOW) //Wait until the deadman switch is pressed again. Stop all other actions, until this happens. 
-    continue;
-  direction == 1 ? this->step(-( 50 - this->exit_pos)) : this->step(- this->exit_pos); //Move the motor to the calibrate position based on the intended direction and abs(remaining steps)
+    continue; //Empty loop
+  this->direction == 1 ? this->step(-( 50 - this->exit_pos)) : this->step(- this->exit_pos); //Move the motor to the calibrate position based on the intended direction and abs(remaining steps)
   //Restore normal working conditions
   this->exit_pos = 0;
-  this->std_pos = 0;
+  this->standard_position = 0;
 }
 
-
-
-
+// Performs all the action with the user and takes account of the deadman switch
+// Is being used in the main loop
 void Motor::user_interaction_deadman(){
+  // Only perform action if the deadman switch is pressed
   if(digitalRead(this->deadman_pin) == HIGH){
-
-    if(digitalRead(this->up_pin) == HIGH && this->std_pos == 0){
+    // Check if the motor is in normal working conditions and up is pressed
+    if(digitalRead(this->up_pin) == HIGH && this->standard_position == 0){
+      // Move to up position, if it fails due to the deadman switch being released, call the according function
       if(this->step(50) == 1){
         print_user_interruption_deadman();
-        execute_user_interruption_deadman(1); 
-      }else{
-        this->std_pos = 50;
+        execute_user_interruption_deadman(); 
       }
-      
-    }else if(digitalRead(this->down_pin) == HIGH && this->std_pos == 50){
+      // If the motor was rotated successfuly, set the standard position to 50 (up) 
+      else{
+        this->standard_position = 50;
+      }
+    }
+    // Check if the motor is in normal working conditions and down is pressed
+    // All the other logic applies here too, for details, see above
+    else if(digitalRead(this->down_pin) == HIGH && this->standard_position == 50){
       if(this->step(-50) == 1){
         print_user_interruption_deadman();
-        execute_user_interruption_deadman(-1);
+        execute_user_interruption_deadman();
       }else{
-        this->std_pos = 0;
+        this->standard_position = 0;
       }
     }
   }

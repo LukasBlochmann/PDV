@@ -21,7 +21,7 @@ class Motor {
 
     void print_user_interruption_deadman();	
 
-    void execute_user_interruption_deadman(int direction);
+    void execute_user_interruption_deadman();
 
     bool prevent_bouncing(int button_last, int active_last);
 
@@ -38,7 +38,7 @@ class Motor {
     void execute_steps(int this_step);
 
     // user interface for calibration
-    void user_launch_communication();
+    void print_initial_help();
 
     // upin = user pin, given by master
     int upin_1;
@@ -47,12 +47,12 @@ class Motor {
     int upin_4;
 
     // needed in calibration func as an cancel indicator
-    bool any_button_pressed;
+    bool is_any_button_pressed;
 
     // used in calibration func, declares the buttons used for following actions
     int forward;
     int backwards;
-    int confirm;
+    int confirmation_pin;
 
     // used in calibration func, to prevent bouncing
     int calibration_button_last;
@@ -67,7 +67,7 @@ class Motor {
 
     // variables needed for normal prosedure (deadman switch)
     int deadman_on;
-    int std_pos;
+    int standard_position;
     int exit_pos;
     bool set_back;
     bool calibrating;
