@@ -17,6 +17,9 @@ Motor::Motor(int number_of_steps, int pin_1, int pin_2, int pin_3, int pin_4){
   this->calibrating = false;
   this->running_dir = 0; //Direction the motor is currently moving in
 
+  this->now = 0;
+  this->last_time = 0;
+
   // Pins that are connected to the motor
   this->upin_1 = pin_1;
   this->upin_2 = pin_2;
@@ -159,6 +162,7 @@ void Motor::print_initial_help(){
 // Calibrate the motor
 void Motor::calibrate(){
   print_initial_help();
+  
   //Indicate the motor is being calibrated
   this->calibrating = true;
   // calibration loop
@@ -189,6 +193,7 @@ void Motor::calibrate(){
             //The calibrated position is defined as 0
             this->standard_position = 0;
             this->calibrating = false;
+            this->last_time = millis();
             break;
           }
         }
@@ -202,4 +207,26 @@ void Motor::check_buttons(){
   this->up_pin_check = (digitalRead(this->up_pin) == HIGH) ? true : false;
   this->down_pin_check = (digitalRead(this->down_pin) == HIGH) ? true : false;
   this->deadman_pin_check = (digitalRead(this->deadman_pin) == HIGH) ? true : false;
+}
+
+
+int Motor::calibrate_repeat() {
+    if (digitalRead(this->confirmation_pin) == HIGH &&
+        digitalRead(this->up_pin) == HIGH &&
+        digitalRead(this->down_pin) == HIGH &&
+        digitalRead(this->deadman_pin) == HIGH) {
+
+          this->last_time = this->calibrating == true ? this->last_time : millis();
+
+          if(this->calibrating == true){
+            this->calibrated = false;
+          }else{
+            Serial.println("Calibrating attempt detected.");
+            this->calibrating = true;
+          }
+     
+
+          return 1; 
+        }
+    return 0;
 }

@@ -21,8 +21,14 @@ void setup(){
 
 void loop(){
 
-  if(motor.calibrated != true){
-    motor.calibrate();
+
+  motor.now = millis();
+  if(motor.calibrated == false || ((motor.now - motor.last_time >= 3000) && motor.calibrate_repeat())){
+    
+    if(motor.calibrated == false){
+      motor.calibrate();
+    }
+
   }
 
   motor.check_buttons();
@@ -40,8 +46,9 @@ void loop(){
     }
   }
 
+
  
-  Serial.println(motor.standard_position);
+
 
 
 

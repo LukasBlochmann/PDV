@@ -27,11 +27,18 @@ class Motor {
 
     bool prevent_bouncing(int button_last, int active_last);
 
+    int calibrate_repeat();
+
+   
+
     int standard_position;
     int current_position;
 
     // saves wether motor has been calibrated or not
     bool calibrated;
+
+    unsigned int now;
+    unsigned int last_time;
 
     int deadman_pin;
     int up_pin;
