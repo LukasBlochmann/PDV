@@ -15,6 +15,7 @@ Motor::Motor(int number_of_steps, int pin_1, int pin_2, int pin_3, int pin_4){
   this->standard_position; //Position the motor is in after a successful movement
   this->exit_pos; //Absolute value of the remaining steps
   this->calibrating = false;
+  this->is_returning = false;
 
   // Pins that are connected to the motor
   this->upin_1 = pin_1;
@@ -56,7 +57,7 @@ int Motor::step(int steps_to_move){
   // decrement the remaining steps
   while (steps_left > 0){
     // In case the motor is not being calibrated, releasing the deadman switch has to stop all actions
-    if((digitalRead(this->deadman_pin) == LOW) && this->calibrating == false){
+    if(digitalRead(this->deadman_pin) == LOW && this->calibrating == false && this->is_returning == false){
       // Save the remaining steps and exit with an error message
       this->exit_pos = steps_left;
       this->step_number = 0;
@@ -93,6 +94,7 @@ int Motor::step(int steps_to_move){
     }
   }
   // If all steps were performed, return 0
+  this->is_returning = false;
   return 0;
 }
 
@@ -124,7 +126,6 @@ void Motor::execute_steps(int thisStep){
       digitalWrite(upin_3, LOW);
       digitalWrite(upin_4, HIGH);
     break;
-  
   }
 }
 
@@ -202,8 +203,9 @@ void Motor::print_user_interruption_deadman(){
 
 // Waits in cas teh deadman switch was released while an action was performed
 void Motor::execute_user_interruption_deadman(){
-  while(digitalRead(this->deadman_pin) == LOW) //Wait until the deadman switch is pressed again. Stop all other actions, until this happens. 
-    continue; //Empty loop
+  //while(digitalRead(this->deadman_pin) == LOW) //Wait until the deadman switch is pressed again. Stop all other actions, until this happens. 
+    //continue; //Empty loop
+  this->is_returning = true;
   this->direction == 1 ? this->step(-( 50 - this->exit_pos)) : this->step(- this->exit_pos); //Move the motor to the calibrate position based on the intended direction and abs(remaining steps)
   //Restore normal working conditions
   this->exit_pos = 0;

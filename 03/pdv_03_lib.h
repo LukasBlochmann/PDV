@@ -71,6 +71,7 @@ class Motor {
     int exit_pos;
     bool set_back;
     bool calibrating;
+    bool is_returning;
 };
 
 #endif
