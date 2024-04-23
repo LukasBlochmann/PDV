@@ -12,6 +12,7 @@
 const int RED = 4, GREEN = 5, YELLOW = 6, BLUE = 7;
 int steps_to_go = 50;
 
+
 Motor motor = Motor(200, BLUE, YELLOW, GREEN, RED);
 
 void setup(){
