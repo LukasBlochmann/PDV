@@ -1,4 +1,4 @@
-#include <Arduino.h>
+#include <Arduino.h> 
 #include "pdv_03_lib.h"
 
 //!!! Datentypen anpassen!!
@@ -218,9 +218,9 @@ void Motor::user_interaction_deadman(){
     // Check if the motor is in normal working conditions and up is pressed
     if(digitalRead(this->up_pin) == HIGH && this->standard_position == 0){
       // Move to up position, if it fails due to the deadman switch being released, call the according function
-      if(this->step(50) == 1){
-        print_user_interruption_deadman();
-        execute_user_interruption_deadman(); 
+      if(digitalRead(this->deadman_pin) == high){
+        
+      }
       }
       // If the motor was rotated successfuly, set the standard position to 50 (up) 
       else{
