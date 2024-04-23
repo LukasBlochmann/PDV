@@ -15,7 +15,7 @@ Motor::Motor(int number_of_steps, int pin_1, int pin_2, int pin_3, int pin_4){
   this->standard_position; //Position the motor is in after a successful movement
   this->exit_pos; //Absolute value of the remaining steps
   this->calibrating = false;
-  this->is_returning = false;
+  this->running_dir = 0; //Direction the motor is currently moving in
 
   // Pins that are connected to the motor
   this->upin_1 = pin_1;
@@ -28,6 +28,9 @@ Motor::Motor(int number_of_steps, int pin_1, int pin_2, int pin_3, int pin_4){
   this->down_pin = 11;
   this->confirmation_pin = 12;
   this->deadman_pin = 13;
+  this->up_pin_check = false;
+  this->down_pin_check = false;
+  this->deadman_pin_check = false;
   
   // Configure the user communication pins as inputs
   for (int i = 10; i <= 13; i++){pinMode(i, INPUT);}
@@ -194,50 +197,9 @@ void Motor::calibrate(){
     }
   }
 }
-
-// Print user information in case the deadman switch was activated
-void Motor::print_user_interruption_deadman(){
-  Serial.println("You stopped pressing the Deadman-Switch.\n");
-  Serial.println("Press the Deadman-Switch again to return to the calibrated position");
-}
-
-// Waits in cas teh deadman switch was released while an action was performed
-void Motor::execute_user_interruption_deadman(){
-  //while(digitalRead(this->deadman_pin) == LOW) //Wait until the deadman switch is pressed again. Stop all other actions, until this happens. 
-    //continue; //Empty loop
-  this->is_returning = true;
-  this->direction == 1 ? this->step(-( 50 - this->exit_pos)) : this->step(- this->exit_pos); //Move the motor to the calibrate position based on the intended direction and abs(remaining steps)
-  //Restore normal working conditions
-  this->exit_pos = 0;
-  this->standard_position = 0;
-}
-
-// Performs all the action with the user and takes account of the deadman switch
-// Is being used in the main loop
-void Motor::user_interaction_deadman(){
-  // Only perform action if the deadman switch is pressed
-  if(digitalRead(this->deadman_pin) == HIGH){
-    // Check if the motor is in normal working conditions and up is pressed
-    if(digitalRead(this->up_pin) == HIGH && this->standard_position == 0){
-      // Move to up position, if it fails due to the deadman switch being released, call the according function
-      if(digitalRead(this->deadman_pin) == high){
-        
-      }
-      }
-      // If the motor was rotated successfuly, set the standard position to 50 (up) 
-      else{
-        this->standard_position = 50;
-      }
-    }
-    // Check if the motor is in normal working conditions and down is pressed
-    // All the other logic applies here too, for details, see above
-    else if(digitalRead(this->down_pin) == HIGH && this->standard_position == 50){
-      if(this->step(-50) == 1){
-        print_user_interruption_deadman();
-        execute_user_interruption_deadman();
-      }else{
-        this->standard_position = 0;
-      }
-    }
-  }
+  
+void Motor::check_buttons(){
+  this->up_pin_check = (digitalRead(this->up_pin) == HIGH) ? true : false;
+  this->down_pin_check = (digitalRead(this->down_pin) == HIGH) ? true : false;
+  this->deadman_pin_check = (digitalRead(this->deadman_pin) == HIGH) ? true : false;
 }
