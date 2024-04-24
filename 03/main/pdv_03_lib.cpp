@@ -1,8 +1,6 @@
 #include <Arduino.h> 
 #include "pdv_03_lib.h"
 
-//!!! Datentypen anpassen!!
-
 Motor::Motor(int number_of_steps, int pin_1, int pin_2, int pin_3, int pin_4){
   // Initialize variables for internal motor control
   this->step_number = 0;    
@@ -118,25 +116,21 @@ void Motor::execute_steps(int this_step){
 
 int Motor::prevent_bouncing(int target_button, int last_state){
   unsigned long now = micros();
-  // Intentionally block the processor because in this situation, we have to forcefully stop all other actions
-  
+
   now = micros();
-  // 
   if(now - this->last_step_time >= 200){
     this->last_step_time = now;
-    // This is the only relevant change in state, so we only have to check this. It detects a change from LOW to HIGH
     if((digitalRead(target_button) == HIGH) && last_state == 0){
-      // Exit the function and return success
-      return 1;
-    }else if((digitalRead(this->up_pin)) == HIGH || (digitalRead(this->down_pin)) == HIGH || (digitalRead(this->deadman_pin = 13)) == HIGH){
-      return 2;
+      return 1; // Returns 1 in case of a successful change from low to high
+    }else if((digitalRead(this->up_pin)) == HIGH || (digitalRead(this->down_pin)) == HIGH || (digitalRead(this->deadman_pin)) == HIGH){
+      return 2; // Return 2 in case of any button press except for confirm
     }
-       
     // Get the last state
   }     
+  // Get the last state
   this->calibration_button_last = (digitalRead(target_button) == LOW) ? 0 : last_state;
 
-  return 0;
+  return 0;  // Return 0 for no change
 }
 
 // Initial communication with user before motor is used for the first time
@@ -180,17 +174,15 @@ void Motor::calibrate(){
           this->is_any_button_pressed = true;
         }
         // check if confirm button is pressed, confirm calibration
-        else{
-          if(this->calibrated == 1){
-            Serial.println("----------------------\nCalibration successful!\n----------------------\n\n");
-            //The calibrated position is defined as 0
-            this->standard_position = 0;
-            this->calibrating = false;
-            this->last_time = millis();
-            this->is_any_button_pressed = false;
-            break;
+        else if(this->calibrated == 1){
+          Serial.println("----------------------\nCalibration successful!\n----------------------\n\n");
+          //The calibrated position is defined as 0
+          this->standard_position = 0;
+          this->calibrating = false;
+          this->last_time = millis();
+          this->is_any_button_pressed = false;
+          break;
           }
-        }
       }
       this->is_any_button_pressed = false;
     }
