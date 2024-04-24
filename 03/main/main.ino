@@ -24,7 +24,7 @@ void loop(){
 
 
   motor.now = millis();
-  if(motor.calibrated == false || ((motor.now - motor.last_time >= 3000) && motor.calibrate_repeat())){
+  if(motor.calibrated != true || ((motor.now - motor.last_time >= 3000) && motor.calibrate_repeat())){
     
     if(motor.calibrated == false){
       motor.calibrate();

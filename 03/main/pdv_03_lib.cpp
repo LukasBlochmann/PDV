@@ -202,7 +202,7 @@ int Motor::calibrate_repeat() {
           if(this->calibrating == true){
             this->calibrated = false;
           }else{
-            Serial.println("Calibrating attempt detected.");
+            Serial.println("----Calibrating attempt detected.----");
             this->calibrating = true;
           }
           return 1; 
