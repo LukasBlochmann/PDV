@@ -1,41 +1,29 @@
 #ifndef pdv_03_lib_h
 #define pdv_03_lib_h
 
-
 class Motor {
   public:
     Motor(int number_of_steps, int pin_1, int pin_2, int pin_3, int pin_4);
     
-
     // speed setting
-    void speed(long user_speed);
+    void speed(long what_speed);
 
     // calculate delay and number of steps
-    void step(int number_of_steps);
+    void step(int steps_to_move);
 
     // align the motor to the initial position
     void calibrate();
 
     void check_buttons();
 
-    // user calibration for normal prosedure (deadman switch)
-    void user_interaction_deadman();
-
-    void print_user_interruption_deadman();	
-
-    void execute_user_interruption_deadman();
-
-    bool prevent_bouncing(int button_last, int active_last);
+    int prevent_bouncing(int target_button, int last_state);
 
     int calibrate_repeat();
-
-   
 
     int standard_position;
     int current_position;
 
-    // saves wether motor has been calibrated or not
-    bool calibrated;
+    int calibrated;
 
     unsigned int now;
     unsigned int last_time;
