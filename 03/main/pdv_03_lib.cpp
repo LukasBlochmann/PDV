@@ -66,7 +66,7 @@ void Motor::step(int steps_to_move){
       // Set timestamp for next step
       this->last_step_time = now;
       
-      // increment or decrement step_number based on direction
+      // increment or decrement step_number based on directionn
       if (this->direction == 1){
         this->step_number++;
         // If the current step number is equal to the number of steps in one revolution, reset it to 0 to start over again
