@@ -51,7 +51,7 @@ void Motor::speed(long whatSpeed){
 }
 
 // Perform a given number of steps
-void Motor::step(int steps_to_move){
+void Motor::step(int steps_to_move){ // !!!!!!
   //steps_to_move: Number of steps to move, positive for up and negative for down
 
   int steps_left = abs(steps_to_move);  
@@ -60,7 +60,7 @@ void Motor::step(int steps_to_move){
   if (steps_to_move > 0) { this->direction = 1; }
   else if (steps_to_move < 0) { this->direction = 0; }
 
-  // decrement the remaining steps
+  //! decrement the remaining steps
   while (steps_left > 0){
 
     // only move if interval has passed
@@ -74,7 +74,7 @@ void Motor::step(int steps_to_move){
         this->step_number++;
         if (this->step_number == this->number_of_steps) {this->step_number = 0;}
       }else{
-        if (this->step_number == 0) {this->step_number = this->number_of_steps;}
+        if (this->step_number == 0) {this->step_number = this->number_of_steps;} //number of steps = 200
         this->step_number--;
       }
       // c.f. l. 53
@@ -84,8 +84,6 @@ void Motor::step(int steps_to_move){
     }
   }
   // If all steps were performed, return 0
-  this->is_returning = false;
-  return 0;
 }
 
 // Physical communication with the motor
@@ -207,8 +205,6 @@ int Motor::calibrate_repeat() {
             Serial.println("Calibrating attempt detected.");
             this->calibrating = true;
           }
-     
-
           return 1; 
         }
     return 0;
