@@ -45,6 +45,8 @@ void loop(){
       motor.standard_position -= 1;
       motor.running_dir = 0;
     }
+  }else{
+    
   }
 
 

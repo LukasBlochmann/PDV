@@ -11,7 +11,7 @@ class Motor {
     void speed(long user_speed);
 
     // calculate delay and number of steps
-    int step(int number_of_steps);
+    void step(int number_of_steps);
 
     // align the motor to the initial position
     void calibrate();
@@ -49,6 +49,9 @@ class Motor {
     bool up_pin_check = false;
     bool down_pin_check = false;
     bool deadman_pin_check = false;
+    unsigned long last_step_time; 
+    unsigned long step_delay; 
+
 
   private:
     // execute calibrated steps
@@ -76,12 +79,10 @@ class Motor {
 
     // following variables are used for direct interaction with the motor
     int direction;          
-    unsigned long step_delay; 
     int number_of_steps;      
     int pin_count;            
     int step_number;
-    unsigned long last_step_time; 
-
+ 
     // variables needed for normal prosedure (deadman switch)
     int deadman_on;
     int exit_pos;

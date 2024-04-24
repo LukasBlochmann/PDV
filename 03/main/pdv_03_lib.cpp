@@ -51,7 +51,7 @@ void Motor::speed(long whatSpeed){
 }
 
 // Perform a given number of steps
-int Motor::step(int steps_to_move){
+void Motor::step(int steps_to_move){
   //steps_to_move: Number of steps to move, positive for up and negative for down
 
   int steps_left = abs(steps_to_move);  
@@ -62,15 +62,6 @@ int Motor::step(int steps_to_move){
 
   // decrement the remaining steps
   while (steps_left > 0){
-    // In case the motor is not being calibrated, releasing the deadman switch has to stop all actions
-    if(digitalRead(this->deadman_pin) == LOW && this->calibrating == false && this->is_returning == false){
-      // Save the remaining steps and exit with an error message
-      this->exit_pos = steps_left;
-      this->step_number = 0;
-      this->number_of_steps = 50;
-      // Return an error
-      return 1;
-    }
 
     // only move if interval has passed
     unsigned long now = micros();
@@ -79,18 +70,11 @@ int Motor::step(int steps_to_move){
       this->last_step_time = now;
       
       // increment or decrement step_number based on direction
-      if (this->direction == 1)
-      {
+      if (this->direction == 1){
         this->step_number++;
-        if (this->step_number == this->number_of_steps) {
-          this->step_number = 0;
-        }
-      }
-      else
-      {
-        if (this->step_number == 0) {
-          this->step_number = this->number_of_steps;
-        }
+        if (this->step_number == this->number_of_steps) {this->step_number = 0;}
+      }else{
+        if (this->step_number == 0) {this->step_number = this->number_of_steps;}
         this->step_number--;
       }
       // c.f. l. 53
@@ -208,7 +192,6 @@ void Motor::check_buttons(){
   this->down_pin_check = (digitalRead(this->down_pin) == HIGH) ? true : false;
   this->deadman_pin_check = (digitalRead(this->deadman_pin) == HIGH) ? true : false;
 }
-
 
 int Motor::calibrate_repeat() {
     if (digitalRead(this->confirmation_pin) == HIGH &&
