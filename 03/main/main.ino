@@ -50,6 +50,6 @@ void loop(){
   else if(motor.standard_position != 50 && motor.standard_position != 0){
     motor.step(-1);
     motor.standard_position -= 1;
-    motor.direction = 0;
+    motor.running_dir = 0;
   }
 }
