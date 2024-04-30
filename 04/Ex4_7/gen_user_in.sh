@@ -1,27 +1,3 @@
-SKRIPT ZUM SPEICHERN DER TAR-ARCHIVE
-
-#!/bin/bash
-
-# Get weekday
-day=$(date +%u)
-
-# Check for 6 and 7
-if [ "$day" -ne 6 ] && [ "$day" -ne 7 ]; then
-    # create tarfile
-    tar -czf ~/Sicherungen/Sicherung_$(date +"%H-%M-%S").tar.gz ~/STTS-Entwicklungen
-fi
-
-chmod +x cron.sh
-
-crontab -e 
-
-*/10 * * * * /home/ubuntu/cron.sh
-
-
-
-
-SKRIPT ZUM GENERIEREN VON USER-INPUT
-
 #!/bin/bash
 
 
@@ -44,6 +20,3 @@ while true; do
     # 5 minuten
     sleep 300
 done
-
-
-bash gen_user_in.sh &  --> [1] 9735

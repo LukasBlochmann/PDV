@@ -1,0 +1,10 @@
+# NACH ERSTELLEN DER .sh DATEI MÜSSEN FOLGENDE BEFEHLE AUSGEFÜHRT WERDEN
+
+> chmod +x cron.sh
+
+
+> crontab -e
+
+
+# IM GEÖFFNETEN CRONTAB MUSS FOLGENDE ZEILE HINZUGEFÜGT WERDEN
+*/10 * * * * /path/to/backup_script.sh

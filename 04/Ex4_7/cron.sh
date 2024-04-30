@@ -8,15 +8,3 @@ if [ "$day" -ne 6 ] && [ "$day" -ne 7 ]; then
     # Create a TAR archive of STTS-Entwicklungen directory
     tar -czf ~/Sicherungen/Sicherung_$(date +"%Y-%m-%d_%H-%M-%S").tar.gz ~/STTS-Entwicklungen
 fi
-
-
-
-
-chmod +x backup_script.sh
-
-
-crontab -e
-
-
-
-*/10 * * * * /path/to/backup_script.sh
