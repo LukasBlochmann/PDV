@@ -1,0 +1,1 @@
+scp -r -i "C:\Users\lukas\OneDrive\Desktop\Learning\Uni\Zweites\Semester\PDV\Aufgabe04\lbpdv.pem" ubuntu@141.72.188.130:~/tv "C:\Users\lukas\OneDrive\Desktop\Learning\Uni\ZweitesSemester\PDV\Aufgabe04\Backup"

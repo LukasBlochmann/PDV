@@ -1,0 +1,35 @@
+[33ma053d36[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m committing the alternitive .ino file --> contains everything in one file
+[33mea62e91[m bla
+[33m086932f[m bug fix 1 mio
+[33m3cfef04[m header finally fixed
+[33m48f81b6[m Commeing and formatting
+[33m4c673bc[m try Merge branch 'com'
+[33m0a2c797[m[33m ([m[1;32mcom[m[33m)[m stage comment branch
+[33mc756d03[m changes in funcs prevent bouncing, calibrate
+[33m089809e[m x
+[33mb4feb4e[m Fixes: - Code restructuring - comments - simple header remake
+[33m7dd5c87[m fix dass schranke runter wenn deadman los
+[33m1f0bf46[m only step func remaining
+[33m4383f9c[m ich denke wenn man die intervall rechnung, wann     ein schritt erfolgen soll in loop mit packt     ist die deadman trigger scheisse stabiler,     #! diskussion für mittwoch
+[33m47fbcdc[m .gitignore aufgemacht und mit bestandenen/     unwichtigen dateien gefüllt
+[33m1953fac[m 1. motor steuerungseinheit in loop() ausgelagert. --> läuft dadurch sogar stabiler. 2. alle anforderungen der des aufgabenblattes erfüllt 3. pins für den motor angepasst 4. entsprechende funktionen in lib.cpp gelöscht
+[33mb0a57c3[m Merge branch 'master' of https://github.com/LukasBlochmann/PDV
+[33m9b431d9[m garb
+[33m874e0f9[m Fix some bugs - Remaining problem: Rapidly releasing the deadman button while holding the up/down buttons creates a positional shift
+[33maa1603a[m - bug fix of the wrong variable being used for the direction detection when reverting after the user released the deadman switch - Removal of duplicate variables - Commenting code - restructuring and formatting code
+[33mc231f1b[m Merge branch 'master' of https://github.com/LukasBlochmann/PDV
+[33m93ca1da[m - Remove feature to continue movement in case of deadman switch - Implement correct return to default calibrated position in case of deadman switch
+[33m5c3f2ce[m Delete hello.txt
+[33mf774f62[m 'test'
+[33m1c9c5ae[m introduction text file for gerrit
+[33ma1b68db[m adding exercise 02 to online repository
+[33mde7d55d[m Merge branch 'master' of https://github.com/LukasBlochmann/PDV
+[33mc06e918[m new folder for exercise
+[33m6532226[m Update README.md
+[33m9281c69[m Create README.md
+[33m9e597e3[m prevent functioning, bugs in reset function
+[33m849fb29[m std pos correclty regulated, problem is to newly calibrate it
+[33m4199668[m prevent bouncing function is valid for calibrating
+[33m3fa629d[m first init of unser interaction funcs with lots of bugs
+[33mc33d539[m bugs in calib
+[33m1d97b70[m initial commit, remaining bug fixes and user interaction with deadman-switch
