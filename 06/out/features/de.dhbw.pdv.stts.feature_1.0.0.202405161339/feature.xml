@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="de.dhbw.pdv.stts.feature"
+      label="Feature"
+      version="1.0.0.202405161339">
+
+   <description url="http://www.example.com/description">
+      [Enter Feature Description here.]
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+
+   <plugin
+         id="org.osgi.util.function"
+         download-size="0"
+         install-size="0"
+         version="1.2.0.202109301733"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.felix.gogo.command"
+         download-size="0"
+         install-size="0"
+         version="1.1.2.v20210111-1007"
+         unpack="false"/>
+
+   <plugin
+         id="org.osgi.util.promise"
+         download-size="0"
+         install-size="0"
+         version="1.2.0.202109301733"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.felix.gogo.shell"
+         download-size="0"
+         install-size="0"
+         version="1.1.4.v20210111-1007"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.osgi.util"
+         download-size="0"
+         install-size="0"
+         version="3.7.0.v20220427-2144"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.felix.gogo.runtime"
+         download-size="0"
+         install-size="0"
+         version="1.1.4.v20210111-1007"
+         unpack="false"/>
+
+   <plugin
+         id="org.osgi.util.position"
+         download-size="0"
+         install-size="0"
+         version="1.0.1.201505202026"
+         unpack="false"/>
+
+   <plugin
+         id="org.osgi.util.xml"
+         download-size="0"
+         install-size="0"
+         version="1.0.2.202109301733"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.equinox.registry"
+         download-size="0"
+         install-size="0"
+         version="3.11.100.v20211021-1418"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.osgi.services"
+         download-size="0"
+         install-size="0"
+         version="3.10.200.v20210723-0643"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.felix.scr"
+         download-size="0"
+         install-size="0"
+         version="2.1.24.v20200924-1939"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.equinox.app"
+         download-size="0"
+         install-size="0"
+         version="1.6.100.v20211021-1418"
+         unpack="false"/>
+
+   <plugin
+         id="org.osgi.util.measurement"
+         download-size="0"
+         install-size="0"
+         version="1.0.2.201802012109"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.equinox.console"
+         download-size="0"
+         install-size="0"
+         version="1.4.500.v20211021-1418"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.osgi"
+         download-size="0"
+         install-size="0"
+         version="3.18.0.v20220516-2155"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.equinox.common"
+         download-size="0"
+         install-size="0"
+         version="3.16.100.v20220315-2327"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.osgi.compatibility.state"
+         download-size="0"
+         install-size="0"
+         version="1.2.600.v20220207-1403"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="de.dhbw.stts.example"
+         download-size="0"
+         install-size="0"
+         version="1.0.0.202405161339"
+         unpack="false"/>
+
+</feature>
