@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Pdv
+Bundle-SymbolicName: de.dhbw.pdv;singleton:=true
+Bundle-Version: 1.0.0
+Require-Bundle: org.eclipse.ui
+Automatic-Module-Name: de.dhbw.pdv
+Bundle-RequiredExecutionEnvironment: JavaSE-21

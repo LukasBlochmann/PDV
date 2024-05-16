@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="de.dhbw.pdv.ex">
+   <implementation class="de.dhbw.pdv.ex.CliEx"/>
+   <reference cardinality="1..1" interface="org.eclipse.osgi.framework.console.CommandProvider" name="CommandProvider" policy="static"/>
+</scr:component>

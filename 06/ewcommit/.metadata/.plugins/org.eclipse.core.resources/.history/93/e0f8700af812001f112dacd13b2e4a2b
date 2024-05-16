@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Ex
+Bundle-SymbolicName: de.dhbw.pdv.ex
+Bundle-Version: 1.0.0
+Automatic-Module-Name: de.dhbw.pdv.ex
+Bundle-RequiredExecutionEnvironment: JavaSE-21

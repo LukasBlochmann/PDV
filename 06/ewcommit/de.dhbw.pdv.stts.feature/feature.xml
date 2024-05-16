@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="de.dhbw.pdv.stts.feature"
+      label="Feature"
+      version="1.0.0.qualifier">
+
+   <description url="http://www.example.com/description">
+      [Enter Feature Description here.]
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+
+   <plugin
+         id="org.eclipse.osgi.compatibility.state"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.osgi.util"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.osgi.services"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.osgi"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.apache.felix.gogo.command"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.apache.felix.gogo.runtime"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.apache.felix.gogo.shell"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.apache.felix.scr"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.equinox.console"
+         version="0.0.0"/>
+
+   <plugin
+         id="de.dhbw.pdv.ex"
+         version="0.0.0"/>
+
+</feature>

@@ -1,0 +1,7 @@
+#Install:
+curl -sSL https://pi4j.com/install | sudo bash
+
+#Path:
+sudo apt install plocate
+locate pi4j
+<Pfad einfach ablesen>

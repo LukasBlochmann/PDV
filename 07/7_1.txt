@@ -1,0 +1,15 @@
+#Download:
+sudo apt-get install git
+
+#Init:
+sudo mkdir /var/Arduino
+cd /var/Arduino
+git init
+
+#Von LocalRechner aus:
+scp -r -i <.pem Datei> <Path/to/Arduino/Sketch> ubuntu@<ip>:/var/Arduino
+
+#Commit:
+sudo git add * (gibt nur eine wichtige Datei also kann man alle in die Stage hauen)
+sudo git commit -m 'initial commit'
+

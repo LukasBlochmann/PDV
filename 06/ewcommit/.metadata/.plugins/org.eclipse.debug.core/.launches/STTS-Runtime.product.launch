@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.pde.ui.RuntimeWorkbench">
+    <setAttribute key="additional_plugins">
+        <setEntry value="org.apache.felix.scr:2.2.10:default:true:2:true"/>
+    </setAttribute>
+    <booleanAttribute key="append.args" value="true"/>
+    <stringAttribute key="application" value=""/>
+    <booleanAttribute key="askclear" value="true"/>
+    <booleanAttribute key="automaticAdd" value="false"/>
+    <booleanAttribute key="automaticIncludeRequirements" value="true"/>
+    <booleanAttribute key="automaticValidate" value="true"/>
+    <booleanAttribute key="clearws" value="false"/>
+    <booleanAttribute key="clearwslog" value="false"/>
+    <booleanAttribute key="default" value="false"/>
+    <booleanAttribute key="includeOptional" value="false"/>
+    <stringAttribute key="location" value="${workspace_loc}/../runtime-STTS-Runtime.product"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog -console -clean"/>
+    <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dorg.eclipse.swt.graphics.Resource.reportNonDisposed=true -Declipse.ignoreApp=true -Dosgi.noShutdown=true"/>
+    <stringAttribute key="pde.version" value="3.3"/>
+    <stringAttribute key="product" value=""/>
+    <stringAttribute key="productFile" value="\de.dhbw.pdv.releng\Products\STTS-Runtime.product"/>
+    <setAttribute key="root_features">
+        <setEntry value="de.dhbw.pdv.stts.feature"/>
+    </setAttribute>
+    <setAttribute key="selected_features">
+        <setEntry value="de.dhbw.pdv.stts.feature:default"/>
+    </setAttribute>
+    <setAttribute key="selected_target_bundles">
+        <setEntry value="org.apache.felix.gogo.command@default:default"/>
+        <setEntry value="org.apache.felix.gogo.runtime@default:default"/>
+        <setEntry value="org.apache.felix.gogo.shell@default:default"/>
+        <setEntry value="org.apache.felix.scr@2:true"/>
+        <setEntry value="org.eclipse.equinox.console@default:default"/>
+        <setEntry value="org.eclipse.osgi.compatibility.state@default:default"/>
+        <setEntry value="org.eclipse.osgi.services@default:default"/>
+        <setEntry value="org.eclipse.osgi.util@default:default"/>
+        <setEntry value="org.eclipse.osgi@default:default"/>
+    </setAttribute>
+    <setAttribute key="selected_workspace_bundles">
+        <setEntry value="de.dhbw.pdv.ex@default:default"/>
+    </setAttribute>
+    <booleanAttribute key="useCustomFeatures" value="true"/>
+    <booleanAttribute key="useDefaultConfig" value="true"/>
+    <booleanAttribute key="useProduct" value="true"/>
+</launchConfiguration>

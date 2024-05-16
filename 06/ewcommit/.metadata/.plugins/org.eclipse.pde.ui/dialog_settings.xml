@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item key="osgiProject" value="true"/>
+	<item key="automaticMetadata" value="false"/>
+	<item key="frameworkType" value="Equinox"/>
+	<item key="generatePluginActivator" value="false"/>
+	<item key="uiPlugin" value="false"/>
+	<item key="apiAnalysis" value="false"/>
+	<item key="rcpPlugin" value="false"/>
+	<item key="initLaunch" value="false"/>
+	<section name="NewPluginProjectWizard.dialogBounds">
+		<item key="DIALOG_X_ORIGIN" value="0"/>
+		<item key="DIALOG_Y_ORIGIN" value="0"/>
+		<item key="DIALOG_WIDTH" value="700"/>
+		<item key="DIALOG_HEIGHT" value="730"/>
+		<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
+	</section>
+	<section name="HelloWorldCmdNewWizard.dialogBounds">
+		<item key="DIALOG_X_ORIGIN" value="0"/>
+		<item key="DIALOG_Y_ORIGIN" value="0"/>
+		<item key="DIALOG_WIDTH" value="700"/>
+		<item key="DIALOG_HEIGHT" value="730"/>
+		<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
+	</section>
+	<section name="quick_assist_proposal_size">
+	</section>
+	<section name="PDEFormActionManager">
+		<list key="RecentLaunches">
+			<item value="org.eclipse.pde.ui.runtimeWorkbenchShortcut"/>
+		</list>
+	</section>
+	<section name="org.eclipse.pde.ui.PLUGIN_STATUS_DIALOG">
+		<item key="DIALOG_WIDTH" value="418"/>
+		<item key="DIALOG_HEIGHT" value="413"/>
+		<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
+	</section>
+	<section name="NewFeatureProjectWizard.dialogBounds">
+		<item key="DIALOG_X_ORIGIN" value="859"/>
+		<item key="DIALOG_Y_ORIGIN" value="184"/>
+		<item key="DIALOG_WIDTH" value="700"/>
+		<item key="DIALOG_HEIGHT" value="705"/>
+		<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
+	</section>
+	<section name="org.eclipse.pde.ui.dialogs.PluginSelectionDialog">
+		<item key="ShowStatusLine" value="true"/>
+		<item key="History" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#x0D;&#x0A;&lt;History/&gt;"/>
+		<section name="DialogBoundsSettings">
+			<item key="DIALOG_HEIGHT" value="500"/>
+			<item key="DIALOG_WIDTH" value="600"/>
+			<item key="DIALOG_X_ORIGIN" value="909"/>
+			<item key="DIALOG_Y_ORIGIN" value="321"/>
+			<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
+		</section>
+	</section>
+	<section name="org.eclipse.pde.ui.dialogs.FeatureSelectionDialog">
+		<item key="ShowStatusLine" value="true"/>
+		<item key="History" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#x0D;&#x0A;&lt;History/&gt;"/>
+		<section name="DialogBoundsSettings">
+			<item key="DIALOG_HEIGHT" value="500"/>
+			<item key="DIALOG_WIDTH" value="600"/>
+			<item key="DIALOG_X_ORIGIN" value="909"/>
+			<item key="DIALOG_Y_ORIGIN" value="321"/>
+			<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
+		</section>
+	</section>
+	<section name="ProductExportWizard">
+		<item key="productConfig0" value="/de.dhbw.pdv.releng/Products/STTS-Runtime.product"/>
+		<item key="productConfig1" value="/de.dhbw.pdv.releng/Products/STTS-Runtime.product"/>
+		<item key="productRoot" value="eclipse"/>
+		<item key="syncProduct" value="false"/>
+		<item key="exportDirectory" value="true"/>
+		<item key="destination0" value="C:\Users\lukas\OneDrive\Desktop\PDV"/>
+		<item key="destination1" value="C:\Users\lukas\OneDrive\Desktop\PDV"/>
+		<item key="exportSource" value="false"/>
+		<item key="exportSourceFormat" value="Generate source bundles"/>
+		<item key="p2metadata" value="false"/>
+		<item key="allowBinaryCycles" value="true"/>
+		<section name="ProductExportWizard.dialogBounds">
+			<item key="DIALOG_X_ORIGIN" value="859"/>
+			<item key="DIALOG_Y_ORIGIN" value="169"/>
+			<item key="DIALOG_WIDTH" value="700"/>
+			<item key="DIALOG_HEIGHT" value="728"/>
+			<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
+		</section>
+	</section>
+</section>

@@ -1,0 +1,9 @@
+!SESSION 2024-05-15 23:06:48.456 -----------------------------------------------
+eclipse.buildId=unknown
+java.version=21.0.3
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=de_DE
+Command-line arguments:  -dev file:C:/Users/lukas/ewcommit/.metadata/.plugins/org.eclipse.pde.core/First OSGi Application/dev.properties -os win32 -ws win32 -arch x86_64 -consoleLog -console
+
+!ENTRY de.dhbw.pdv.ex 4 0 2024-05-15 23:06:48.926
+!MESSAGE bundle de.dhbw.pdv.ex:1.0.0 (1) Component descriptor entry 'example_component.xml' not found
